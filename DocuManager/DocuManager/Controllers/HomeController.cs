@@ -1,6 +1,12 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using DocuManager.Models;
+using Microsoft.Extensions.FileSystemGlobbing.Internal;
+using Microsoft.VisualBasic;
+using System.Reflection.Metadata;
+using System.Runtime.Intrinsics.X86;
+using System.Threading;
+using DocuManager.Models;
 
 namespace DocuManager.Controllers;
 
@@ -15,7 +21,19 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        return View();
+        
+        DocuManager.Models.Document document = new DocuManager.Models.Document()
+        {
+            Name = "Document 1",
+            Type = "PDF",
+            TypeIcon = "pdf-icon.png",
+            PreviewImage = null,
+            UploadDateTime = DateTime.Now.AddDays(-2),
+            DownloadCount = 10,
+            Id = 1
+        };
+
+        return View("index", document);
     }
 
     public IActionResult Privacy()
@@ -28,5 +46,6 @@ public class HomeController : Controller
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
+
 }
 

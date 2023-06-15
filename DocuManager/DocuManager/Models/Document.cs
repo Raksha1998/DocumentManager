@@ -11,5 +11,8 @@ namespace DocuManager.Models
         public int DownloadCount { get; set; }
         public int Id { get; set; }
     }
+
+
+
 }
 
