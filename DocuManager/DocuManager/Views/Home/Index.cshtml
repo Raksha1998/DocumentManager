@@ -1,9 +1,86 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Document Management Application</title>
+    <!-- Include your CSS and JavaScript files here -->
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Document Manager</h1>
+    </header>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+
+    <!-- Upload Document Code -->
+
+
+    <section class="upload-section">
+        <h2>Upload Documents</h2>
+        <input type="file" id="file-upload" multiple>
+        <progress id="upload-progress" value="0" max="100"></progress>
+    </section>
+
+    <script>var fileInput = document.getElementById('file-upload');
+        var progressBar = document.getElementById('upload-progress');
+
+        fileInput.addEventListener('change', function () {
+            var files = fileInput.files;
+            for (var i = 0; i < files.length; i++) {
+                uploadFile(files[i]);
+            }
+        });
+
+        function uploadFile(file) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/upload'); // Replace '/upload' with your upload endpoint
+            xhr.upload.addEventListener('progress', function (event) {
+                if (event.lengthComputable) {
+                    var progress = (event.loaded / event.total) * 100;
+                    progressBar.value = progress;
+                }
+            });
+            xhr.send(file);
+        }</script>
+
+
+    <!--Display Available Document-->
+
+
+    <section class="document-list">
+        <h2>Available Documents</h2>
+        <ul>
+            @foreach (var document in Model.Documents)
+            {
+                <li>
+                    <div class="document-info">
+                        <div class="document-icon">
+                            <img src="icons/@document.TypeIcon.png" alt="@document.Type" />
+                        </div>
+                        <div class="document-details">
+                            <h3>@document.Name</h3>
+                            @if (document.Type == "image")
+                            {
+                                <div class="preview-image">
+                                    <img src="@document.PreviewImage" alt="Preview Image" />
+                                </div>
+                            }
+                            <p>Uploaded on: @document.UploadDateTime</p>
+                            <p>Downloads: @document.DownloadCount</p>
+                        </div>
+                    </div>
+                    <div class="document-actions">
+                        <a href="download/@document.Id" class="download-button">Download</a>
+                        <button class="share-button" data-document-id="@document.Id">Share</button>
+                    </div>
+                </li>
+            }
+            </ul>
+        </section>
+
+</body>
+</html>
+
+
 
